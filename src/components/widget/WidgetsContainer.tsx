@@ -1,30 +1,13 @@
-import React, { Children } from "react";
+import React, { useMemo } from "react";
 
+import { modifyChildren } from "./helpers";
+import { WidgetsContainerProps } from "./types";
 import "./styles.css";
 
-interface WidgetsContainerProps {
-  children: React.ReactNode;
-}
-
 const WidgetsContainer = ({ children }: WidgetsContainerProps) => {
-  const arrayChildren = Children.map(
-    children,
-    (child: React.ReactElement, index: number) => {
-      return React.cloneElement(child, {
-        column: (index % 5) + 1,
-        row: Math.floor(index / 5) + 1,
-        order: index,
-      });
-    }
-  );
+  const modifiedChildren = useMemo(() => modifyChildren(children), [children]);
 
-  arrayChildren?.sort(
-    (a, b) =>
-      (a.props.priority || Number.MAX_VALUE) -
-      (b.props.priority || Number.MAX_VALUE)
-  );
-  console.log(arrayChildren);
-  return <div className="widgets-container">{arrayChildren}</div>;
+  return <div className="widgets-container">{modifiedChildren}</div>;
 };
 
 export default WidgetsContainer;

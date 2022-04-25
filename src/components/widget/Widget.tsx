@@ -1,38 +1,49 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import AppChart from "../chart/AppChart";
+
+import { fetchData } from "./helpers";
+import { WidgetProps } from "./types";
 import CSS from "csstype";
 
-interface WidgetProps {
-  title?: string;
-  gridColumnStart?: number | "auto";
-  gridRowStart?: number | "auto";
-  gridColumnSpan?: number;
-  gridRowSpan?: number;
-  priority?: number;
-  span?: number;
-  order?: number;
-}
-
-const Widget = ({
-  title,
-  gridColumnStart,
-  gridColumnSpan,
-  order,
-  gridRowStart,
-  gridRowSpan,
-}: WidgetProps) => {
-  const widgetStyles: CSS.Properties = {
-    order,
+const Widget = React.memo(
+  ({
+    apiUrl,
+    chart,
+    chartType,
+    children,
+    gridColumnSpan,
     gridColumnStart,
+    gridRowSpan,
     gridRowStart,
-    gridColumn: `${gridColumnStart || "auto"}/span ${gridColumnSpan || "auto"}`,
-    gridRow: `${gridRowStart || "auto"}/span ${gridRowSpan || "auto"}`,
-  };
+    order,
+    title,
+  }: WidgetProps) => {
+    const widgetStyles: CSS.Properties = {
+      order,
+      gridColumnStart,
+      gridRowStart,
+      gridColumn: `${gridColumnStart || "auto"}/span ${
+        gridColumnSpan || "auto"
+      }`,
+      gridRow: `${gridRowStart || "auto"}/span ${gridRowSpan || "auto"}`,
+    };
+    const [chartData, setChartData] = useState(chart);
 
-  return (
-    <div style={widgetStyles} className="widget">
-      {title && <h3 className="widget-title">{title}</h3>}
-    </div>
-  );
-};
+    useEffect(() => {
+      if (apiUrl) {
+        const fetchedData = fetchData(apiUrl);
+        setChartData(fetchedData);
+      }
+    }, [apiUrl]);
+
+    return (
+      <div style={widgetStyles} className="widget">
+        {title && <h3 className="widget-title">{title}</h3>}
+        {chartType && <AppChart type={chartType} chart={chartData} />}
+        <div className="widget-content">{children}</div>
+      </div>
+    );
+  }
+);
 
 export default Widget;
