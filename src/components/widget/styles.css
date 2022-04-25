@@ -1,4 +1,11 @@
-.widget-container {
+.widgets-container {
     display: grid;
-    grid-template-columns: repeat(auto-fill, 200px);
+    grid-template-columns: repeat(5, 1fr);
+    gap: 5px;
+}
+.widget {
+    padding: 1rem;
+}
+.widget-title {
+    text-transform: capitalize;
 }

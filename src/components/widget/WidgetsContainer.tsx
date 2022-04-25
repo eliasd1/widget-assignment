@@ -1,13 +1,13 @@
-import React from "react";
+import React, { useMemo } from "react";
 
+import { modifyChildren } from "./helpers";
+import { WidgetsContainerProps } from "./types";
 import "./styles.css";
 
-interface WidgetsContainerProps {
-  children: React.ReactNode;
-}
-
 const WidgetsContainer = ({ children }: WidgetsContainerProps) => {
-  return <div className="widget-container">{children}</div>;
+  const modifiedChildren = useMemo(() => modifyChildren(children), [children]);
+
+  return <div className="widgets-container">{modifiedChildren}</div>;
 };
 
 export default WidgetsContainer;
