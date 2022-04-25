@@ -21,6 +21,7 @@ function App() {
           </div>
         </Widget>
         <Widget
+          priority={1}
           gridColumnSpan={2}
           title="fifth"
           chartType="line"
