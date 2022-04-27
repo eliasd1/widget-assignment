@@ -29,7 +29,7 @@ const useWidgets = () => {
   const [currentPriority, setCurrentPriorty] = useState(1);
 
   const fetchWidgetData = useCallback(async () => {
-    const widgetsCopy = [...widgets];
+    const widgetsCopy = widgets.map((widget) => ({ ...widget }));
     const filteredWidgets = widgetsCopy.filter(
       (w) => w.priority === currentPriority
     );
@@ -45,6 +45,7 @@ const useWidgets = () => {
       });
       setWidgets(widgetsCopy);
     }
+    console.log(widgets, widgetsCopy);
   }, [currentPriority, widgets]);
 
   const fetchWidgets = useCallback(async () => {
