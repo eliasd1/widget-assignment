@@ -45,7 +45,6 @@ const useWidgets = () => {
       });
       setWidgets(widgetsCopy);
     }
-    console.log(widgets, widgetsCopy);
   }, [currentPriority, widgets]);
 
   const fetchWidgets = useCallback(async () => {
