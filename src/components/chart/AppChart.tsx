@@ -19,12 +19,14 @@ import {
 export type ChartType = "line" | "bar" | "scatter" | "pie";
 
 interface AppChartProps {
-  type: ChartType;
   chart: any;
 }
 
-const AppChart = ({ type, chart }: AppChartProps) => {
-  if (type === "line") {
+const AppChart = React.memo(({ chart }: AppChartProps) => {
+  if (!chart?.type) {
+    return null;
+  }
+  if (chart.type === "line") {
     return (
       <ResponsiveContainer width="100%" aspect={1} maxHeight={300}>
         <LineChart data={chart.data}>
@@ -47,7 +49,7 @@ const AppChart = ({ type, chart }: AppChartProps) => {
       </ResponsiveContainer>
     );
   }
-  if (type === "bar") {
+  if (chart.type === "bar") {
     return (
       <ResponsiveContainer aspect={1} maxHeight={300}>
         <BarChart data={chart.data}>
@@ -59,7 +61,7 @@ const AppChart = ({ type, chart }: AppChartProps) => {
       </ResponsiveContainer>
     );
   }
-  if (type === "scatter") {
+  if (chart.type === "scatter") {
     return (
       <ResponsiveContainer aspect={1} maxHeight={300}>
         <ScatterChart width={400} height={400}>
@@ -78,7 +80,7 @@ const AppChart = ({ type, chart }: AppChartProps) => {
       </PieChart>
     </ResponsiveContainer>
   );
-};
+});
 
 export default AppChart;
 //

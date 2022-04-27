@@ -1,13 +1,31 @@
-import React, { useMemo } from "react";
+import React, { useEffect } from "react";
 
-import { modifyChildren } from "./helpers";
-import { WidgetsContainerProps } from "./types";
+// import { modifyChildren } from "./helpers";
+import useWidgets from "./hooks/useWidgets";
+import Widget from "./Widget";
 import "./styles.css";
 
-const WidgetsContainer = ({ children }: WidgetsContainerProps) => {
-  const modifiedChildren = useMemo(() => modifyChildren(children), [children]);
+interface WidgetProps {
+  id: number;
+  title: string;
+  priority: number;
+  [key: string]: any;
+}
 
-  return <div className="widgets-container">{modifiedChildren}</div>;
+const WidgetsContainer = () => {
+  const { widgets, fetchWidgets } = useWidgets();
+
+  useEffect(() => {
+    fetchWidgets();
+  }, [fetchWidgets]);
+
+  return (
+    <div className="widgets-container">
+      {widgets.map((widget: WidgetProps) => {
+        return <Widget key={widget.id} {...widget} />;
+      })}
+    </div>
+  );
 };
 
 export default WidgetsContainer;
