@@ -29,26 +29,24 @@ const useWidgets = () => {
   const [currentPriority, setCurrentPriorty] = useState(1);
 
   const fetchWidgetData = useCallback(async () => {
-    const widgetsCopy = widgets.map((widget) => ({ ...widget }));
-    const filteredWidgets = widgetsCopy.filter(
-      (w) => w.priority === currentPriority
-    );
-
-    if (filteredWidgets.length) {
+    try {
       const data = await getData(getWidgetDataUrl(currentPriority));
-
       setCurrentPriorty((prev) => ++prev);
-      filteredWidgets.forEach((filteredWidget) => {
-        filteredWidget.chart = data.find(
-          (d: any) => d.widgetId === filteredWidget.id
-        );
+      const updatedWidgets = widgets.map((widget) => {
+        if (widget.chart?.widgetId) return widget;
+        const foundData = data.find((d: any) => d.widgetId === widget.id);
+        if (!foundData) return widget;
+        widget.chart = foundData;
+        return widget;
       });
-      setWidgets(widgetsCopy);
+      setWidgets(updatedWidgets);
+    } catch (error) {
+      console.log("error", error);
     }
   }, [currentPriority, widgets]);
 
   const fetchWidgets = useCallback(async () => {
-    const response = await fetch(WIDGETS_API_ENDPOINT);
+    const response = await fetch(WIDGETS_API_ENDPOINT, {});
     setWidgets((await response.json()).widgets);
   }, []);
 
